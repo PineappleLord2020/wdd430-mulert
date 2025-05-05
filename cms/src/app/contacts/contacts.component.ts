@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './contacts.component.css'
 })
 export class ContactsComponent {
-
+  conat
 }
