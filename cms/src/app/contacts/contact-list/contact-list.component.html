@@ -7,6 +7,6 @@
 <hr>
 <div class="row">
     <div class="col-xs-12">
-        <cms-contact-item *ngFor="let ContactItem of ContactItems" [contact]="ContactItem"></cms-contact-item>
+        <app-contact-item *ngFor="let contact of contacts" [contact]="contact" (selected)="onSelected($event)"> </app-contact-item>
     </div>
 </div>
