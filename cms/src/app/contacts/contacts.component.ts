@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-//import { Contact } from "contact.model.ts";
+import { Contact } from "../contacts/contact.model";
 
 
 @Component({
