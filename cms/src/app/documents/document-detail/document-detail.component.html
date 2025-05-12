@@ -1,1 +1,36 @@
-<p>document-detail works!</p>
+<div class="row">
+    <div class="col-xs-12">
+        <img src="" alt="" class="img-responsive">
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <h1 class="panel-title">{{ document.name }}</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="btn-group">
+            <button 
+                type="button" 
+                class="btn btn-primary">
+                Edit
+            </button>
+            <button 
+                type="button" 
+                class="btn btn-danger">
+                Delete
+            </button>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <b>Description:</b> {{ document.description }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <b>URL:</b> {{ document.url }}
+    </div>
+</div>

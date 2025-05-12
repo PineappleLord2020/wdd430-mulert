@@ -1,5 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 
+import { Document } from "../document.model"
+
 @Component({
   selector: 'app-document-list',
   standalone: false,
@@ -18,7 +20,7 @@ export class DocumentListComponent {
       },
       {
         id: 2, 
-        name: 'The Illiad', 
+        name: 'The Iliad', 
         description: 'The prequel to the long story, about a war over a woman. Like most wars are.',
         url: 'https://classics.mit.edu/Homer/iliad.html',
       },
