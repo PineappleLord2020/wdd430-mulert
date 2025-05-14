@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 
 import { Document } from "../document.model"
 
@@ -8,8 +8,8 @@ import { Document } from "../document.model"
   templateUrl: './document-list.component.html',
   styleUrl: './document-list.component.css'
 })
-export class DocumentListComponent {
-  @Output() selectedDocumentEvent = new EventEmitter<Document>();
+export class DocumentListComponent implements OnInit {
+  @Output() documentSelected = new EventEmitter<Document>();
 
     documents = [
       {
@@ -39,7 +39,7 @@ export class DocumentListComponent {
       {
         id: 5, 
         name: "The Titan's Curse", 
-        description: "a story about a boy who wants to save his friend who he definitely doesn't have feelings for",
+        description: "A story about a boy who wants to save his friend who he definitely doesn't have feelings for",
         url: 'https://rickriordan.com/book/the-titans-curse/',
       },
     ];
@@ -48,7 +48,7 @@ export class DocumentListComponent {
 
     ngOnInit() {}
 
-    onSelectedDocument(document: Document){
-      this.selectedDocumentEvent.emit(document);
+    onSelected(document: Document){
+      this.documentSelected.emit(document);
     }
 }
