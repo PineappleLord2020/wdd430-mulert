@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-
 import { Message } from '../message.model';
+import { MessageService } from '../message.service'
 
 @Component({
   selector: 'app-message-list',
@@ -9,32 +9,16 @@ import { Message } from '../message.model';
   styleUrl: './message-list.component.css'
 })
 export class MessageListComponent {
-  @Output() addMessageEvent = new EventEmitter<Message>();
 
+  messages: Message[] = [];
 
-  messages = [
-    {
-      subject: 'Can I go home please?',
-      msgText: 'It has been 20 years. Guys? Anyone?',
-      sender: 'Odysseus',
-    },
-    {
-      subject: 'Told you so',
-      msgText: 'You messed up. I gave you a warning',
-      sender: 'Athena',
-    },
-    {
-      subject: 'LOL, Idiot',
-      msgText: 'Totally deserves to be punished ngl.',
-      sender: 'Zeus',
-    },
-  ];
-
-  constructor() {}
+  constructor(private messageService: MessageService) {}
   
-    ngOnInit() {}
-  
-    onAddMessage(message: Message) {
-      this.messages.push(message);
+    ngOnInit(): void {
+      this.messages = this.messageService.getMessages();
+      this.messageService.messageChangedEvent.subscribe(
+        (messages: Message[])=> {
+          this.messages = messages;
+        })
     }
 }
