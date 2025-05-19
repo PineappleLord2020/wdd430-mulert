@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-
+import { Component, OnInit } from '@angular/core';
 import { Contact } from "./contact.model";
+import { ContactService } from "../contacts/contact.service"
 
 
 @Component({
@@ -11,4 +11,14 @@ import { Contact } from "./contact.model";
 })
 export class ContactsComponent {
   selectedContact: Contact;
+
+  constructor (private contactService: ContactService) {}
+  
+  ngOnInit(): void {
+    this.contactService.contactSelectedEvent.subscribe(
+      (contact: Contact) => {
+        this.selectedContact = contact;
+      }
+    )
+  }
 }
