@@ -1,12 +1,12 @@
 <div class="row">
     <div class="col-xs-12">
         <h1 class="panel-title">Contacts</h1>
-        <button class="btn btn-success">New Contact</button>
+        <button class="btn btn-success" [routerLink]="['new']">New Contact</button>
     </div>
 </div>
 <hr>
 <div class="row">
     <div class="col-xs-12">
-        <app-contact-item *ngFor="let contact of contacts" [contact]="contact" (contactSelected)="onSelected($event)"> </app-contact-item>
+        <app-contact-item *ngFor="let contact of contacts" [contact]="contact"> </app-contact-item>
     </div>
 </div>

@@ -11,16 +11,25 @@
 <div class="row">
     <div class="col-xs-12">
         <div class="btn-group">
-            <button 
+            <a
+                type="button"
+                class="btn btn-primary"
+                (click)="onView()">
+                View
+            </a>
+            <a 
                 type="button" 
-                class="btn btn-primary">
+                class="btn btn-info"
+                [routerLink]="['/documents', document.id, 'edit']">
                 Edit
-            </button>
-            <button 
+            </a>
+            <a 
                 type="button" 
-                class="btn btn-danger">
+                class="btn btn-danger"
+                [routerLink]="['/documents', document.id, 'delete']"
+                (click)="onDelete()">
                 Delete
-            </button>
+            </a>
         </div>
     </div>
 </div>
