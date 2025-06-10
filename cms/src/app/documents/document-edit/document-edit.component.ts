@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DocumentsService } from '../documents.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Document } from '../document.model';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-document-edit',
@@ -43,9 +44,23 @@ export class DocumentEditComponent implements OnInit {
     )
   }
 
-  onSubmit(){
-    this.valve = form.valve;
-    this.newDocument = new Document();
+  onSubmit(form: NgForm){
+    const value = form.value;
+    const newDocument: Document = {
+      id: this.editMode && this.originalDocument ? this.originalDocument.id : '',
+      name: value.name,
+      description: value.description,
+      url: value.url,
+      children: value.children,
+    };
+
+    if (this.editMode === true){
+      this.documentService.updateDocument(this.originalDocument as Document, newDocument)
+    } else {
+      this.documentService.addDocument(newDocument)
+    }
+    
+    this.router.navigate(['/documents'])
   }
 
   onCancel(){
