@@ -7,7 +7,7 @@
 <hr>
 <div class="row">
     <div class="col-xs-12">
-        <app-contact-item *ngFor="let contact of contacts" [contact]="contact"
-        dnd-draggable [dragEnabled]="true" [dragData]="contact" [dropZones]="['contactGroup']"> </app-contact-item>
+        <app-contact-item *ngFor="let contact of contacts" [contact]="contact"> </app-contact-item>
+        <!--THIS STUPID CODE THAT I HAD TO REMOVE!!!  dnd-draggable [dragEnabled]="true" [dragData]="contact" [dropZones]="['contactGroup']"-->
     </div>
 </div>
