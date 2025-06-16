@@ -13,6 +13,10 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
   contacts: Contact[] = [];
   subscription = new Subscription;
+  term: string;
+  search(value: string) {
+    this.term = value;
+  }
 
   constructor( private contactService: ContactService) {}
 

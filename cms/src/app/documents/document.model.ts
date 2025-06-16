@@ -3,7 +3,7 @@ export class Document {
         public name: string;
         public description: string;
         public url: string;
-        public children: Document[];
+        public children?: Document[];
     
     constructor(id: string, name: string, description: string, url: string, children: Document[]) {
         this.id = id;

@@ -1,16 +1,17 @@
+<div *ngIf="contact">
 <div class="row">
     <div class="col-xs-12">
-        <img src="" alt="" class="img-responsive">
+        <img [src]="contact?.imageUrl" [alt]="contact?.name" class="img-responsive">
     </div>
 </div>
 <div class="row">
     <div class="col-xs-12">
-        <h1 class="panel-title">{{ contact.name }}</h1>
+        <h1 class="panel-title">{{ contact?.name }}</h1>
     </div>
 </div>
 <div class="row">
     <div class="col-xs-12">
-        <img src="{{ contact.imageUrl }}" alt="{{ contact.name }}" class="img-responsive">
+        <img src="{{ contact?.imageUrl }}" alt="{{ contact?.name }}" class="img-responsive">
         <div class="btn-group">
             <a 
                 type="button" 
@@ -29,11 +30,12 @@
 </div>
 <div class="row">
     <div class="col-xs-12">
-        <b>Email:</b> {{ contact.email }}
+        <b>Email:</b> {{ contact?.email || 'N/A' }}
     </div>
 </div>
 <div class="row">
     <div class="col-xs-12">
-        <b>Phone:</b> {{ contact.phone }}
+        <b>Phone:</b> {{ contact?.phone || 'N/A' }}
     </div>
+</div>
 </div>

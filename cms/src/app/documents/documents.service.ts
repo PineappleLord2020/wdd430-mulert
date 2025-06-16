@@ -1,22 +1,85 @@
 import { Subject } from 'rxjs';
 import { Injectable, EventEmitter } from '@angular/core';
-import { Document } from '../documents/document.model'
-import { MOCKDOCUMENTS } from '../documents/MOCKDOCUMENTS'
+import { Document } from '../documents/document.model';
+import { MOCKDOCUMENTS } from '../documents/MOCKDOCUMENTS';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentsService {
 
-  documents: Document[] =[];
-  maxDocumentId: number;
+  documents: Document[] = [];
+  maxDocumentId: number = 0;
   documentSelectedEvent = new EventEmitter<Document>();
   documentChangedEvent = new EventEmitter<Document[]>();
   documentListChangedEvent = new Subject<Document[]>();
 
-  constructor() { 
-    this.documents = MOCKDOCUMENTS;
-    this.maxDocumentId = this.getMaxId();
+  constructor(private http: HttpClient) { 
+    const firebaseUrl = 'https://fullstackdevelopment61625-default-rtdb.firebaseio.com/documents.json';
+
+    interface FirebaseDocumentResponse extends Document {
+      children?: FirebaseDocumentResponse[];
+    }
+
+    this.http.get<FirebaseDocumentResponse[]>(firebaseUrl).pipe(
+      tap(rawData => {
+        console.log('DocumentsService: RAW data from Firebase:', rawData)
+      }),
+      map(firebaseData => {
+        const allDocuments: Document[] = [];
+
+        const flattenDocuments = (items: FirebaseDocumentResponse[]) => {
+          if (!items) return;
+
+          items.forEach(item => {
+            allDocuments.push({
+              id: item.id,
+              name: item.name,
+              description: item.description,
+              url: item.url,
+              children: []
+            });
+
+            if (item.children && item.children.length > 0) {
+              flattenDocuments(item.children);
+            }
+          });
+      };
+
+      flattenDocuments(firebaseData);
+
+      return allDocuments;
+    }),
+    tap(flattenedData => {
+      console.log('DocumentsService: Flattened data AFTER map operator:', flattenedData);
+    })
+    ).subscribe(
+      (documents: Document[]) => {
+        this.documents = documents;
+        this.maxDocumentId = this.getMaxId();
+
+        this.documents.sort((a, b) => {
+          const nameA = a.name ? a.name.toLowerCase() : '';
+          const nameB = b.name ? b.name.toLowerCase() : '';
+
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+          return 0
+        });
+
+        this.documentListChangedEvent.next(this.documents.slice());
+      },
+      (error: any) => {
+        console.error('Error fetching documents:', error);
+        this.documentListChangedEvent.next([]);
+      }
+    );
   }
 
   getMaxId(): number {
@@ -55,7 +118,7 @@ export class DocumentsService {
     this.documents.push(newDocument);
     const documentsListClone = this.documents.slice();
 
-    this.documentListChangedEvent.next(documentsListClone);
+    this.storeDocuments();
     
   }
 
@@ -72,7 +135,7 @@ export class DocumentsService {
     newDocument.id = originalDocument.id;
     this.documents[pos] = newDocument;
     const documentsListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentsListClone);
+    this.storeDocuments();
   }
 
   deleteDocument(document: Document) {
@@ -85,6 +148,20 @@ export class DocumentsService {
     }
     this.documents.splice(pos, 1);
     const documentsListClone = this.documents.slice();
-    this.documentChangedEvent.next(documentsListClone);
+    this.storeDocuments();
+  }
+
+  storeDocuments() {
+    const firebaseUrl = 'https://fullstackdevelopment61625-default-rtdb.firebaseio.com/documents.json';
+    const documentsJson = JSON.stringify(this.documents);
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+    this.http.put(firebaseUrl, documentsJson, { headers: headers })
+      .subscribe(() => {
+        console.log('DocumentsService: Documents successfully stored on Firebase.');
+        this.documentListChangedEvent.next(this.documents.slice())
+      }, (error) => {
+        console.error('DocumentsService: Error storing documents on Firebase:', error);
+      });
   }
 }
