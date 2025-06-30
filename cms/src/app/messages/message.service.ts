@@ -2,6 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Message } from './message.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 //import { MOCKMESSAGES } from './MOCKMESSAGES';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -18,23 +19,39 @@ export class MessageService {
   }
 
   private fetchMessages() {
-    const firebaseUrl = 'https://fullstackdevelopment61625-default-rtdb.firebaseio.com/messages.json'
+    const messagesUrl = 'http://localhost:3000/contacts'
 
-    this.http.get<Message[]>(firebaseUrl)
-    .subscribe({
-      next: (messages: Message[]) => {
-        console.log('MessageService: Messages fetched successfully from Firebase:', messages);
+    interface NodeJsMessagesResponse {
+      message: string;
+      messages: Message[];
+    }
+
+    this.http.get<NodeJsMessagesResponse>(messagesUrl).pipe(
+      tap(rawData => {
+        console.log('MessageService: Raw data from NodeJS:', rawData)
+      }),
+      map(response => {
+        return response.messages;
+      }),
+      tap(extractedMessages => {
+        console.log('MessageService: Extracted messages AFTER map operator:', extractedMessages);
+      })
+    ).subscribe(
+      {
+        next: (messages: Message[]) => {
+          console.log('MessageService: Messages fetched successfully from Node.js:', messages);
         this.messages = messages || [];
         this.maxMessageId = this.getMaxId();
 
         this.messageChangedEvent.emit(this.messages.slice());
       },
       error: (error: any) => {
-        console.error('MessageService: Error fetching messages from Firebase:', error);
+        console.error('MessageService: Error fetching messages from Node.js:', error);
         this.messageChangedEvent.emit([]);
       }
-    })
-  }
+    }
+  );
+}
 
   getMessages(): Message[] {
     return this.messages.slice();
@@ -53,11 +70,59 @@ export class MessageService {
     if (!message) {
       return;
     }
-    this.maxMessageId++;
-    message.id = this.maxMessageId.toString();
-    this.messages.push(message);
-    this.storeMessages();
-    console.log('Message added (will be stored):', message);
+    
+    message.id = '';
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
+
+    this.http.post<{ message: string, newMessage: Message }>(
+      'http://localhost:3000/messages',
+      message,
+      { headers: headers }
+    ).subscribe({
+      next: (responseData) => {
+        console.log('MessageService: Message added successfully to Node.js:', responseData.message);
+        this.messages.push(responseData.newMessage);
+        this.messageChangedEvent.emit(this.messages.slice());
+      }
+    })
+  }
+
+  updateMessage(originalMessage: Message, newMessage: Message) {
+    if (!originalMessage || !newMessage || !originalMessage.id) {
+      return;
+    }
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
+
+    this.http.put('http://localhost:3000/messages/' + originalMessage.id, newMessage, { headers: headers})
+      .subscribe({
+        next: () => {
+          const pos = this.messages.indexOf(originalMessage);
+          if (pos > -1) {
+            newMessage.id = originalMessage.id;
+            this.messages[pos] = newMessage;
+            this.messageChangedEvent.emit(this.messages.slice());
+          }
+        }
+      })
+  }
+
+  deleteMessage(message: Message) {
+    if (!message || !message.id) {
+      return;
+    }
+    
+    this.http.delete('http://localhost:3000/messages/' + message.id)
+      .subscribe({
+        next: () => {
+          const pos = this.messages.indexOf(message);
+          if (pos > -1) {
+            this.messages.splice(pos, 1);
+            this.messageChangedEvent.emit(this.messages.slice());
+          }
+        }
+      });
   }
 
   getMaxId(): number {

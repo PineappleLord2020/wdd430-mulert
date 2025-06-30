@@ -5,6 +5,7 @@ var http = require('http');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose');
 
 // import the routing file to handle the default (index) route
 var index = require('./server/routes/app');
@@ -12,12 +13,12 @@ const messageRoutes = require('./server/routes/messages');
 const contactRoutes = require('./server/routes/contacts');
 const documentsRoutes = require('./server/routes/documents');
 
-// ... ADD CODE TO IMPORT YOUR ROUTING FILES HERE ... 
+// ... ADD CODE TO IMPORT YOUR ROUTING FILES HERE ... */
 
 var app = express(); // create an instance of express
 
 // Tell express to use the following parsers for POST data
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
@@ -63,6 +64,14 @@ app.get('*', (req, res) => {
 // Define the port address and tell express to use this port
 const port = process.env.PORT || '3000';
 app.set('port', port);
+
+mongoose.connect('mongodb://localhost:27017/cms', { useNewUrlParser: true })
+  .then(() => {
+    console.log('Connected to database!');
+})
+  .catch(err => {
+    console.log('Connection failed:', err);
+});
 
 // Create HTTP server.
 const server = http.createServer(app);
