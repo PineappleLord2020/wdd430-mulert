@@ -1,0 +1,45 @@
+<div class="row" *ngIf="document">
+    <div class="col-xs-12">
+        <img [src]="document?.url" [alt]="document?.name" class="img-responsive">
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <h1 class="panel-title">{{ document?.name }}</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="btn-group">
+            <a
+                type="button"
+                class="btn btn-primary"
+                (click)="onView()">
+                View
+            </a>
+            <a 
+                type="button" 
+                class="btn btn-info"
+                [routerLink]="['/documents', document?.id, 'edit']">
+                Edit
+            </a>
+            <a 
+                type="button" 
+                class="btn btn-danger"
+                [routerLink]="['/documents', document?.id, 'delete']"
+                (click)="onDelete()">
+                Delete
+            </a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <b>Description:</b> {{ document?.description }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <b>URL:</b> {{ document?.url || 'N/A' }}
+    </div>
+</div>

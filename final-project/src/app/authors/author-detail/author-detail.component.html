@@ -1,0 +1,41 @@
+<div *ngIf="author">
+<div class="row">
+    <div class="col-xs-12">
+        <img [src]="author?.imageUrl" [alt]="author?.name" class="img-responsive">
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <h1 class="panel-title">{{ author?.name }}</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <img src="{{ author?.imageUrl }}" alt="{{ author?.name }}" class="img-responsive">
+        <div class="btn-group">
+            <a 
+                type="button" 
+                class="btn btn-primary"
+                [routerLink]="['/authors', author.id, 'edit']">
+                Edit
+            </a>
+            <a 
+                type="button" 
+                class="btn btn-danger"
+                (click)="onDelete()">
+                Delete
+            </a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <b>Email:</b> {{ author?.email || 'N/A' }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <b>Phone:</b> {{ author?.phone || 'N/A' }}
+    </div>
+</div>
+</div>
