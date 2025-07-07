@@ -9,17 +9,17 @@ import { AuthorDetailComponent } from './authors/author-detail/author-detail.com
 import { AuthorItemComponent } from './authors/author-item/author-item.component';
 import { AuthorEditComponent } from './authors/author-edit/author-edit.component';
 import { AuthorsFilterPipe } from './authors/authors-filter.pipe';
-import { DocumentsComponent } from './documents/documents.component';
-import { DocumentListComponent } from './documents/document-list/document-list.component'
-import { DocumentItemComponent } from './documents/document-item/document-item.component';
-import { DocumentDetailComponent } from './documents/document-detail/document-detail.component';
-import { MessagesComponent } from './messages/messages.component';
-import { MessageListComponent } from './messages/message-list/message-list.component';
-import { MessageItemComponent } from './messages/message-item/message-item.component';
-import { MessageEditComponent } from './messages/message-edit/message-edit.component';
+import { BooksComponent } from './books/books.component';
+import { BookListComponent } from './books/book-list/book-list.component'
+import { BookItemComponent } from './books/book-item/book-item.component';
+import { BookDetailComponent } from './books/book-detail/book-detail.component';
+import { BookEditComponent } from './books/book-edit/book-edit.component';
+import { LocationsComponent } from './locations/locations.component';
+import { LocationListComponent } from './locations/location-list/location-list.component';
+import { LocationItemComponent } from './locations/location-item/location-item.component';
+import { LocationEditComponent } from './locations/location-edit/location-edit.component';
 import { DropdownDirective } from './shared/dropdown.directive';
 import { AppRoutingModule } from './app-routing.module';
-import { DocumentEditComponent } from './documents/document-edit/document-edit.component';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { provideHttpClient } from '@angular/common/http';
@@ -34,15 +34,15 @@ import { provideHttpClient } from '@angular/common/http';
     AuthorItemComponent,
     AuthorEditComponent,
     AuthorsFilterPipe,
-    DocumentsComponent,
-    DocumentListComponent,
-    DocumentItemComponent,
-    DocumentDetailComponent,
-    MessagesComponent,
-    MessageListComponent,
-    MessageEditComponent,
-    DocumentListComponent,
-    DocumentEditComponent,
+    BooksComponent,
+    BookListComponent,
+    BookItemComponent,
+    BookListComponent,
+    BookEditComponent,
+    BookDetailComponent,
+    LocationsComponent,
+    LocationListComponent,
+    LocationEditComponent,
   ],
   imports: [
     BrowserModule,

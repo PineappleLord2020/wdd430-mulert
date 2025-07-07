@@ -1,0 +1,50 @@
+<div class="row" *ngIf="book">
+    <div class="col-xs-12">
+        <img [src]="book?.url" [alt]="book?.name" class="img-responsive">
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <h1 class="panel-title">{{ book?.name }}</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="btn-group">
+            <a
+                type="button"
+                class="btn btn-primary"
+                (click)="onView()">
+                View
+            </a>
+            <a 
+                type="button" 
+                class="btn btn-info"
+                [routerLink]="['/books', book?.id, 'edit']">
+                Edit
+            </a>
+            <a 
+                type="button" 
+                class="btn btn-danger"
+                [routerLink]="['/books', book?.id, 'delete']"
+                (click)="onDelete()">
+                Delete
+            </a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <b>Description:</b> {{ book?.description }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <b>URL:</b> {{ book?.url || 'N/A' }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <b>Release Date:</b> {{ book?.release || 'N/A' }}
+    </div>
+</div>
