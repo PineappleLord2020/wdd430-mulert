@@ -66,18 +66,18 @@ export class LocationService {
     return null;
   }
 
-  addLocation(location: Location){
-    if (!location) {
+  addLocation(newLocation: Location){
+    if (!newLocation) {
       return;
     }
     
-    location.id = '';
+    newLocation.id = '';
 
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
 
-    this.http.post<{ location: string, newLocation: Location }>(
+    this.http.post<{ location: String, newLocation: Location }>(
       'http://localhost:3000/locations',
-      location,
+      newLocation,
       { headers: headers }
     ).subscribe({
       next: (responseData) => {
@@ -95,17 +95,23 @@ export class LocationService {
 
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
 
-    this.http.put('http://localhost:3000/locations/' + originalLocation.id, newLocation, { headers: headers})
-      .subscribe({
-        next: () => {
-          const pos = this.locations.indexOf(originalLocation);
+    this.http.put<void>('http://localhost:3000/locations/' + originalLocation.id, newLocation, { headers: headers})
+      .subscribe(
+        () => {
+        console.log('LocationService: Location updated successfully on Node.js');
+        
+        const pos = this.locations.indexOf(originalLocation);
           if (pos > -1) {
             newLocation.id = originalLocation.id;
+
             this.locations[pos] = newLocation;
             this.locationChangedEvent.emit(this.locations.slice());
           }
-        }
-      })
+        },
+      (error) => {
+        console.error('LocationService: Error updating location on Node.js', error);
+      }
+    );
   }
 
   deleteLocation(location: Location) {

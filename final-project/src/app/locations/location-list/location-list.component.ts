@@ -1,4 +1,5 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Component, Output, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '../location.model';
 import { LocationService } from '../location.service'
 
@@ -8,17 +9,26 @@ import { LocationService } from '../location.service'
   templateUrl: './location-list.component.html',
   styleUrl: './location-list.component.css'
 })
-export class LocationListComponent {
+export class LocationListComponent implements OnInit, OnDestroy {
 
   locations: Location[] = [];
+  subscription = new Subscription;
 
   constructor(private locationService: LocationService) {}
   
     ngOnInit(): void {
       this.locations = this.locationService.getLocations();
-      this.locationService.locationChangedEvent.subscribe(
+
+      /*this.subscription = this.locationService.locationChangedEvent.subscribe(
         (locations: Location[])=> {
           this.locations = locations;
-        })
+        }
+      )*/
+    }
+
+    ngOnDestroy(): void {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
     }
 }

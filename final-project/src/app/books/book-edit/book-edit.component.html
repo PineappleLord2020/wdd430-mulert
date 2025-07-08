@@ -4,7 +4,7 @@
     <form id="book-edit" #f="ngForm" (ngSubmit)="onSubmit(f)">
       <div class="row">
         <div class="col-sm-12 form-group">
-          <label for="name">Book Title:</label>
+          <label for="name">Title:</label>
           <input
             required
             type="text"
@@ -20,7 +20,7 @@
 
       <div class="row">
         <div class="col-sm-12 form-group">
-          <label for="description">Book Description:</label>
+          <label for="description">Description:</label>
           <input
             type="text"
             id="description"
@@ -34,7 +34,7 @@
 
       <div class="row">
         <div class="col-sm-12 form-group">
-          <label for="url">Book URL:</label>
+          <label for="url">URL:</label>
           <input
             required
             type="text"
@@ -50,11 +50,11 @@
 
       <div class="row">
         <div class="col-sm-12 form-group">
-          <label for="url">Book Release:</label>
+          <label for="url">Release:</label>
           <input
             required
             type="text"
-            id="url"
+            id="release"
             class="form-control"
             size="150"
             max="255"

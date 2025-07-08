@@ -1,0 +1,36 @@
+<div class="row" *ngIf="location">
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <h1 class="panel-title">{{ location?.name }}</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="btn-group">
+            <a 
+                type="button" 
+                class="btn btn-info"
+                [routerLink]="['/locations', location?.id, 'edit']">
+                Edit
+            </a>
+            <a 
+                type="button" 
+                class="btn btn-danger"
+                [routerLink]="['/location', location?.id, 'delete']"
+                (click)="onDelete()">
+                Delete
+            </a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <b>Address:</b> {{ location?.address }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <b>Phone:</b> {{ location?.phone || 'N/A' }}
+    </div>
+</div>

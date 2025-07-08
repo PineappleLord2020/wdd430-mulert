@@ -1,14 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { BooksService } from '../books.service';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params, RouterModule } from '@angular/router';
 import { Book } from '../book.model';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-book-edit',
-  standalone: false,
+  standalone: true,
   templateUrl: './book-edit.component.html',
-  styleUrl: './book-edit.component.css'
+  styleUrl: './book-edit.component.css',
+  imports: [
+    FormsModule,
+    RouterModule,
+    CommonModule
+  ]
 })
 export class BookEditComponent implements OnInit {
 

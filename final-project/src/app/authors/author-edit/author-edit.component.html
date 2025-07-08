@@ -76,27 +76,6 @@
             >
         </div>
       </div>
-
-      <div class="row">
-        <div class="form-group">
-          <label for="groupList">Group Authors:</label>
-
-          <div class="row" id="groupList"
-              style="min-height: 3rem;">
-              <!--THIS STUPID CODE THAT I HAD TO REMOVE!!! dnd-droppable [dropZones]="['authorGroup']" (onDropSuccess)="addToGroup($event)"-->
-
-            <div *ngFor="let author of groupAuthors; let i = index">
-              <div>
-                <final-project-author-item class="col-sm-11" [author]="author"></final-project-author-item>
-                <button class="btn btn-danger col-sm-2 deleteButton" (click)="onRemoveItem(i)">X</button>
-              </div>
-            </div>
-            <span class="dragMsg" *ngIf="groupAuthors?.length < 1">Drag authors in group here</span>
-          </div>
-
-        </div>
-      </div>
-
       <div class="alert alert-danger" *ngIf="name?.untouched && name.invalid || email?.untouched && email.invalid">
         The Name and Email fields are required
       </div>

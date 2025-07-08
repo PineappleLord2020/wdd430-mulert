@@ -1,35 +1,51 @@
 <div class="panel panel-default">
-<div class="panel-body">
-<form id="document-edit">
-<div class="row">
-<div class="col-sm-12 form-group">
-<label for="subject">Subject</label>
-<input
-type="text"
-id="subject"
-class="form-control"
-size="120"
-max="120"
-#subject>
-</div>
-
-<div class="col-sm-12 form-group">
-<label for="location">Location</label>
-<input
-type="text"
-id="location"
-class="form-control"
-max="255"
-size="120"
-#msgText>
-</div>
-</div>
-<div class="row">
-<div class="col-xs-12">
-<button class="btn btn-success" type="submit" (click)="onSendLocation()">Add</button>
-<button class="btn btn-danger" type="button" (click)="onClear()">Clear</button>
-</div>
-</div>
-</form>
-</div>
+    <div class="panel-body">
+        <form id="document-edit" #f="ngForm" (ngSubmit)="onSubmit(f)">
+            <div class="row">
+                <div class="col-sm-12 form-group">
+                    <label for="name">Name:</label>
+                    <input
+                        required
+                        type="text"
+                        id="name"
+                        class="form-control"
+                        size="120"
+                        max="120"
+                        #subject
+                    >
+                </div>
+                <div class="col-sm-12 form-group">
+                    <label for="address">Address:</label>
+                    <input
+                        required
+                        type="text"
+                        id="address"
+                        class="form-control"
+                        max="255"
+                        size="120"
+                        #msgText
+                    >
+                </div>
+                <div class="col-sm-12 form-group">
+                    <label for="phone">Phone:</label>
+                    <input
+                        type="text"
+                        id="phone"
+                        class="form-control"
+                        max="16"
+                        size="9"
+                        #msgText
+                    >
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <button class="btn btn-success" type="submit" [disabled]="f.invalid">Add</button>
+                    <!--(click)="onSendLocation()"-->
+                    <button class="btn btn-danger" type="button" (click)="onClear()">Clear</button>
+                    <button class="btn btn-primary" type="button" (click)="onCancel()">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>

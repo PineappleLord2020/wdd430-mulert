@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header.component';
@@ -18,6 +19,7 @@ import { LocationsComponent } from './locations/locations.component';
 import { LocationListComponent } from './locations/location-list/location-list.component';
 import { LocationItemComponent } from './locations/location-item/location-item.component';
 import { LocationEditComponent } from './locations/location-edit/location-edit.component';
+import { LocationDetailComponent } from './locations/location-detail/location-detail.component';
 import { DropdownDirective } from './shared/dropdown.directive';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
@@ -37,8 +39,6 @@ import { provideHttpClient } from '@angular/common/http';
     BooksComponent,
     BookListComponent,
     BookItemComponent,
-    BookListComponent,
-    BookEditComponent,
     BookDetailComponent,
     LocationsComponent,
     LocationListComponent,
@@ -46,10 +46,14 @@ import { provideHttpClient } from '@angular/common/http';
   ],
   imports: [
     BrowserModule,
-    DropdownDirective,
     AppRoutingModule,
     FormsModule,
     DragDropModule,
+    RouterModule,
+    LocationItemComponent,
+    LocationDetailComponent,
+    BookEditComponent,
+    DropdownDirective,
 
   ],
   providers: [provideHttpClient()],

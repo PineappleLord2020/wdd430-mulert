@@ -2,7 +2,7 @@
   <div class="panel-heading">
     <div class="row pad-left-right">
       <span class="pull-left title">Books</span>
-      <a class="btn btn-success pull-right">Add Book</a>
+      <a class="btn btn-success pull-right" [routerLink]="['new']">Add Book</a>
     </div>
   </div>
   <div class="panel-body">
@@ -10,5 +10,5 @@
       <app-book-item *ngFor="let book of books" [book]="book"></app-book-item>
     </div>
   </div>
-
+  <router-outlet></router-outlet>
 </div>
