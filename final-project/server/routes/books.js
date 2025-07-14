@@ -1,39 +1,42 @@
 const sequenceGenerator = require('./sequenceGenerator');
-const Document = require('../models/document');
+const Book = require('../models/book');
 const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-    Document.find()
-        .then(documents => {
+    Book.find()
+        .then(books => {
+            console.log('DEBUG: Books fetched from DB by Mongoose:', books)
             res.status(200).json({
-                message: 'Documents fetched successfully!',
-                documents: documents
+                message: 'Books fetched successfully!',
+                books: books
             });
         })
         .catch(error => {
             res.status(500).json({
-                message: 'An error occurred while fetching documents',
+                message: 'An error occurred while fetching books',
                 error: error
             });
         });
     });
 
 router.post('/', (req, res, next) => {
-    const maxDocumentId = sequenceGenerator.nextId("documents");
+    const maxBookId = sequenceGenerator.nextId("books");
 
-    const document = new Document({
-        id: maxDocumentId,
+    const book = new Book({
+        id: maxBookId,
         name: req.body.name,
         description: req.body.description,
-        url: req.body.url
+        url: req.body.url,
+        release: req.body.release,
+        children: req.body.children
     });
 
-    document.save()
-        .then(createdDocument => {
+    book.save()
+        .then(createdBook => {
             res.status(201).json({
-                message: 'Document added successfully',
-                document: createdDocument
+                message: 'Book added successfully',
+                book: createdBook
             });
         })
         .catch(error => {
@@ -45,23 +48,25 @@ router.post('/', (req, res, next) => {
     });
 
 router.put('/:id', (req, res, next) => {
-    Document.findOne({ id: req.params.id })
-        .then(document => {
-            if(!document) {
+    Book.findOne({ id: req.params.id })
+        .then(book => {
+            if(!book) {
                 return res.status(404).json({
-                    message: 'Document not found.',
-                    error: { document: 'Document not found' }
+                    message: 'Book not found.',
+                    error: { book: 'Book not found' }
                 });
             }
 
-            document.name = req.body.name;
-            document.description = req.body.description;
-            document.url = req.body.url;
+            book.name = req.body.name;
+            book.description = req.body.description;
+            book.url = req.body.url;
+            book.release = req.body.release;
+            book.children = req.body.children;
 
-    document.save()
+    book.save()
         .then(result => {
             res.status(204).json({
-                message: 'Document updated successfully'
+                message: 'Book updated successfully'
             })
         })
         .catch(error => {
@@ -73,23 +78,23 @@ router.put('/:id', (req, res, next) => {
     })
     .catch(error => {
         res.status(500).json({
-            message: 'An error occurred trying to find document for update.',
+            message: 'An error occurred trying to find book for update.',
             error: error
         });
     });
 });
 
 router.delete("/:id", (req, res, next) => {
-    Document.deleteOne({ id: req.params.id })
+    Book.deleteOne({ id: req.params.id })
         .then(result => {
             if (result.deletedCount === 0) {
                 return res.status(404).json({
-                    message: 'Document not found for deletion.',
-                    error: { document: 'Document not found'}
+                    message: 'Book not found for deletion.',
+                    error: { book: 'Book not found'}
                 });
             }
             res.status(204).json({
-                message: "Document deleted successfully"
+                message: "Book deleted successfully"
             });
         })
         .catch(error => {

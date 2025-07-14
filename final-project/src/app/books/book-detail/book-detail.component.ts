@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { Book } from '../book.model';
 import { BooksService } from '../books.service';
@@ -11,8 +12,11 @@ import { WindRefService } from '../../wind-ref.service';
   templateUrl: './book-detail.component.html',
   styleUrl: './book-detail.component.css'
 })
-export class BookDetailComponent implements OnInit {
+export class BookDetailComponent implements OnInit, OnDestroy {
   nativeWindow: any;
+  book!: Book;
+  private paramsSubscription!: Subscription;
+  private booksChangedSubscription!: Subscription;
   
   constructor( 
     private BooksService: BooksService, 
@@ -22,17 +26,36 @@ export class BookDetailComponent implements OnInit {
   ) { 
     this.nativeWindow = windRefService.getNativeWindow();
   };
-  
-  book: Book;
 
   ngOnInit(): void{
-    this.route.params.subscribe(
+    this.paramsSubscription = this.route.params.subscribe(
       (params) =>{
         const id = params['id'];
 
         this.book = this.BooksService.getBook(id);
+
+        if (!this.book) {
+          this.booksChangedSubscription = this.BooksService.bookListChangedEvent.subscribe(
+            (books: Book[]) => {
+              this.book = this.BooksService.getBook(id);
+
+              if (this.book && this.booksChangedSubscription) {
+                this.booksChangedSubscription.unsubscribe();
+              }
+            }
+          )
+        }
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    if (this.paramsSubscription) {
+      this.paramsSubscription.unsubscribe();
+    }
+    if (this.booksChangedSubscription) {
+      this.booksChangedSubscription.unsubscribe();
+    }
   }
 
   onView() {

@@ -17,13 +17,16 @@ export class LocationListComponent implements OnInit, OnDestroy {
   constructor(private locationService: LocationService) {}
   
     ngOnInit(): void {
-      this.locations = this.locationService.getLocations();
+      this.locationService.fetchLocations();
 
-      /*this.subscription = this.locationService.locationChangedEvent.subscribe(
+      this.subscription = this.locationService.locationChangedEvent.subscribe(
         (locations: Location[])=> {
+          console.log('LocationsListComponent: Received updated locations from service:', locations);
           this.locations = locations;
         }
-      )*/
+      );
+
+      this.locations = this.locationService.getLocations();
     }
 
     ngOnDestroy(): void {

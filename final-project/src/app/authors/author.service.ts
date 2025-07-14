@@ -17,12 +17,11 @@ export class AuthorService {
   authorChangedEvent = new EventEmitter<Author[]>();
   authorListChangedEvent = new Subject<Author[]>();
 
-  constructor(private http: HttpClient) { 
-    this.fetchAuthors();
-  }
+  constructor(private http: HttpClient) {}
   
-  private fetchAuthors() {
-    const authorsUrl = 'https://localhost:3000/authors';
+  public fetchAuthors() {
+    console.log('AuthorService: fetchAuthors() called!');
+    const authorsUrl = 'http://localhost:3000/api/authors';
         interface NodeJsAuthorsResponse {
           message: string;
           authors: Author[];
@@ -103,7 +102,7 @@ export class AuthorService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
 
     this.http.post<{ message: String, newAuthor: Author }>(
-      'http://localhost:3000/authors',
+      'http://localhost:3000/api/authors',
       newAuthor,
       {headers: headers }
     ).subscribe(
@@ -126,7 +125,7 @@ export class AuthorService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
 
     this.http.put<void>(
-      'http://localhost:3000/authors/' + originalAuthor.id,
+      'http://localhost:3000/api/authors/' + originalAuthor.id,
       newAuthor,
       { headers: headers }
     ).subscribe(
@@ -151,7 +150,7 @@ export class AuthorService {
     if (!author) {
       return;
     }
-    this.http.delete<void>('http://localhost:3000/authors/' + author.id)
+    this.http.delete<void>('http://localhost:3000/api/authors/' + author.id)
       .subscribe(
         () => {
           console.log('AuthorService: Author deleted successfully from Node.js.');

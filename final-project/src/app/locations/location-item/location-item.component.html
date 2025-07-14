@@ -1,6 +1,7 @@
-<a class="list-group-item clearfix">
+<a class="list-group-item clearfix" (click)="onSelected()">
 <div class="">
 <span class="locationHeader">{{ location.name }}</span>
-<div class="locationText">{{ location?.address }}</div>
+<div class="locationText">{{ location.address }}</div>
+<div class="locationPhone">Phone: {{ location.phone }}</div>
 </div>
 </a>

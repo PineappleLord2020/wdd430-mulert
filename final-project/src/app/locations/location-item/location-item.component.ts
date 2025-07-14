@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Location } from '../location.model'
-import { Author } from '../../authors/author.model'
-import { AuthorService } from '../../authors/author.service'
+import { LocationService } from '../location.service'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-location-item',
@@ -9,18 +9,15 @@ import { AuthorService } from '../../authors/author.service'
   styleUrl: './location-item.component.css'
 })
 export class LocationItemComponent implements OnInit {
-  @Input() location: Location;
+  @Input() location!: Location;
 
   locationPhone: string;
 
-  constructor(private authorService: AuthorService){};
+  constructor(private router: Router){};
 
-  ngOnInit(): void {
-    const author: Author | undefined = this.authorService.getAuthor(this.location.phone);
-    if (author) {
-      this.locationPhone = author.name;
-    } else {
-      this.locationPhone = 'Unknown Sender';
-    }
+  ngOnInit(): void {}
+
+  onSelected() {
+    this.router.navigate(['locations', this.location.id]);
   }
 }

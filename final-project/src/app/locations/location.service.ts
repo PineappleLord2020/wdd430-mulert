@@ -13,20 +13,16 @@ export class LocationService {
   locationChangedEvent = new EventEmitter<Location[]>();
   maxLocationId: number = 0;
 
-  constructor(private http: HttpClient) { 
-    this.fetchLocations();
-    
-  }
+  constructor(private http: HttpClient) {  }
 
-  private fetchLocations() {
-    const locationsUrl = 'http://localhost:3000/authors'
+  fetchLocations() {
 
     interface NodeJsLocationsResponse {
-      location: string;
+      message: string;
       locations: Location[];
     }
 
-    this.http.get<NodeJsLocationsResponse>(locationsUrl).pipe(
+    this.http.get<NodeJsLocationsResponse>('http://localhost:3000/api/locations').pipe(
       tap(rawData => {
         console.log('LocationService: Raw data from NodeJS:', rawData)
       }),
@@ -76,7 +72,7 @@ export class LocationService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
 
     this.http.post<{ location: String, newLocation: Location }>(
-      'http://localhost:3000/locations',
+      'http://localhost:3000/api/locations',
       newLocation,
       { headers: headers }
     ).subscribe({
@@ -95,7 +91,7 @@ export class LocationService {
 
     const headers = new HttpHeaders({ 'Content-Type': 'application/json'});
 
-    this.http.put<void>('http://localhost:3000/locations/' + originalLocation.id, newLocation, { headers: headers})
+    this.http.put<void>('http://localhost:3000/api/locations/' + originalLocation.id, newLocation, { headers: headers})
       .subscribe(
         () => {
         console.log('LocationService: Location updated successfully on Node.js');
@@ -119,7 +115,7 @@ export class LocationService {
       return;
     }
     
-    this.http.delete('http://localhost:3000/locations/' + location.id)
+    this.http.delete('http://localhost:3000/api/locations/' + location.id)
       .subscribe({
         next: () => {
           const pos = this.locations.indexOf(location);

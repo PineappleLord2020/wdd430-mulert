@@ -17,7 +17,7 @@ export class BooksService {
   bookListChangedEvent = new Subject<Book[]>();
 
   constructor(private http: HttpClient) { 
-    const booksUrl = 'http://localhost:3000/books';
+    const booksUrl = 'http://localhost:3000/api/books';
 
     interface NodeJsBooksResponse {
       message: string;
@@ -114,7 +114,7 @@ export class BooksService {
     const headers = new HttpHeaders ({'Content-Type':'application/json'});
 
     this.http.post<{ message: string, book: Book }>
-    ('http://localhost:3000/books',
+    ('http://localhost:3000/api/books',
       book,
       {headers: headers })
       .subscribe(
@@ -140,7 +140,7 @@ export class BooksService {
     
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
 
-    this.http.put('http://localhost:3000/books/' + originalBook.id,
+    this.http.put('http://localhost:3000/api/books/' + originalBook.id,
       newBook, {headers: headers }).subscribe(
         (response: Response) => {
           this.books[pos] = newBook;
@@ -157,7 +157,7 @@ export class BooksService {
     if (pos < 0){
       return;
     }
-    this.http.delete('http://localhost:3000/books/' + book.id)
+    this.http.delete('http://localhost:3000/api/books/' + book.id)
       .subscribe(
         (response: Response) => {
           this.books.splice(pos, 1);

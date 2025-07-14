@@ -1,7 +1,34 @@
 var Sequence = require('../models/sequence');
 
-function SequenceGenerator() {
+var maxBookId;
+var maxLocationId;
+var maxAuthorId;
+var sequenceId = null;
 
+
+function SequenceGenerator() {
+  this.sequence = null;
+  this.sequenceId = 0;
+  this.maxBookId = 0;
+  this.maxLocationId = 0;
+  this.maxAuthorId = 0;
+
+  Sequence.findOne().exec()
+  .then(sequence => {
+    if (sequence) {
+      this.sequence = sequence;
+      this.sequenceId = sequence._id;
+      this.maxBookId = sequence.maxBookId;
+      this.maxLocationId = sequence.maxLocationId;
+      this.maxAuthorId = sequence.maxAuthorId;
+      console.log('Sequence loaded:', this.sequence);
+    } else {
+      console.warn('Sequence document not found in DB. Please ensure it is created.');
+    }
+  })
+    .catch(err => {
+      console.error('Error fetching sequence:', err);
+    });
 }
 
 SequenceGenerator.prototype.nextId = function(collectionType) {
@@ -15,13 +42,13 @@ SequenceGenerator.prototype.nextId = function(collectionType) {
       let nextId;
 
       switch (collectionType) {
-        case 'documents':
-          sequence.maxDocumentId++;
-          nextId = sequence.maxDocumentId;
+        case 'books':
+          sequence.maxBookId++;
+          nextId = sequence.maxBookId;
           break;
-        case 'messages':
-          sequence.maxMessageId++;
-          nextId = sequence.maxMessageId;
+        case 'locations':
+          sequence.maxLocationId++;
+          nextId = sequence.maxLocationId;
           break;
         case 'authors':
           sequence.maxAuthorId++;
