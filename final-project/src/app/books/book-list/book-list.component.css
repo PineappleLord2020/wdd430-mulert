@@ -13,3 +13,15 @@
   padding-left:1rem;
   padding-right:1rem;
 }
+
+.panel{
+  background-color:rgba(63, 51, 39, 0.75)
+}
+
+.panel-heading{
+  background-color: #BF9B77;
+}
+
+.btn{
+  border-radius: 15px;
+}

@@ -19,30 +19,51 @@ router.get('/', (req, res, next) => {
         });
     });
 
-router.post('/', (req, res, next) => {
-    const maxLocationId = sequenceGenerator.nextId("locations");
+router.post('/', async (req, res, next) => {
+    console.log('[DEBUG-LOCATIONS-POST] --- Starting new location POST request ---');
+    console.log('[DEBUG-LOCATIONS-POST] Received body:', req.body);
 
-    const location = new Location({
-        id: maxLocationId,
-        subject: req.body.subject,
-        msgText: req.body.msgText,
-        sender: req.body.sender
-    });
-
-    location.save()
-        .then(createdLocation => {
-            res.status(201).json({
-                location: 'Location added successfully',
-                newLocation: createdLocation
-            });
-        })
-        .catch(error => {
-            res.status(500).json({
-                location: 'An error occurred',
-                error: error
-            });
+    let maxLocationId;
+    try{
+        maxLocationId = await sequenceGenerator.nextId("locations");
+        if (maxLocationId === undefined || maxLocationId === null) {
+            throw new Error('sequenceGenerator.nextId returned undefined or null for locations. ');  
+        }
+    } catch (sequenceError) {
+        console.error('[DEBUG-LOCATIONS-POST] ERROR: sequenceGenerator for locations failed!', sequenceError);
+        return res.status(500).json({
+            message: 'Failed to generate location ID.',
+            error: sequenceError.message || sequenceError
         });
-    });
+    }
+
+    let location;
+    try{
+        location = new Location({
+            id: maxLocationId,
+            name: req.body.name,
+            address: req.body.address,
+            phone: req.body.phone,
+        });
+        console.log('[DEBUG-LOCATIONS-POST] Location instance created with ID:', location.id, 'Full object:', location);
+
+        const createdLocation = await location.save();
+        console.log('[DEBUG-LOCATIONS-POST] Location saved successfully:', createdLocation);
+        return res.status(201).json({
+            message: 'Location added successfully',
+            document: createdLocation
+        });
+    } catch (error) {
+        console.error('DEBUG-LOCATIONS-POST] ERROR saving location (Mongoose catch):', error);
+
+        let errorMessage = 'AN error occurred while saving the location to the database.';
+        if (error.name === 'Validation Error') {
+            errorMessage = 'Validation failed: ' + error.message;
+        } else if (error.code === 11000) {
+            errorMessage = 'Duplicate entry for location ID or unique field.';
+        }
+    }         
+});
 
 router.put('/:id', (req, res, next) => {
     Location.findOne({ id: req.params.id })

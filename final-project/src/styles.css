@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+
+html{
+    background-image: url("./images/library.jpg");
+    background-color: blue;
+}
+
+.col-md-4 {
+    background-color: rgba(63, 51, 39, 0.75);
+    padding: 10px;
+    border-radius: 20px;
+    border-style: 2px solid rgb(206, 155, 107);
+    color: white;
+}
+
+.col-xs-12{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.panel-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}

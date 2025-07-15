@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Imperial+Script&display=swap');
+
+.navbar{
+    background-color: #BF9B77;
+}
+
+.navbar-brand{
+    color: #372D22;
+    font-weight: bold;
+    font-size: 30px;
+    font-family: 'Imperial Script', Georgia, serif;
+}
+
+.navbar-brand:hover{
+    color: white;
+    background-color: #372D22;
+}
+
+.navbar-nav>li>a{
+    color: #372D22;
+    font-weight: bold;
+}
+
+.navbar-nav>li>a:hover{
+    background-color: #312921;
+    color: white;
+}

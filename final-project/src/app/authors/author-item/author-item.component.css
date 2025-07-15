@@ -1,0 +1,15 @@
+.list-group-item.active{
+    background-color: #E1B68C;
+    color: #372D22;
+    border-color: #372D22; 
+}
+
+.list-group-item.active>div>h4{
+    font-weight: bold;
+}
+
+.list-group-item{
+    background-color: #fde2c7;
+    color: #372D22;
+    border-radius: 10px 10px 15px 15px;
+}

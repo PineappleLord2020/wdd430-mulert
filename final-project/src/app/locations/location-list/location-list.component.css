@@ -6,3 +6,31 @@ font-weight: bold;
 padding-left: 1rem;
 padding-right: 1rem;
 }
+
+.panel-footer{
+    background-color: #372D22bf;
+    color: white;
+    border-radius: 20px;
+}
+
+.panel{
+    background-color: #403428bf;
+    border-radius: 20px;
+}
+
+.panel-heading{
+    background-color: #BF9B77;
+    border-radius: 20px 20px 0px 0px;
+}
+
+.panel-body{
+    border-radius: 15px;
+}
+
+.panel-default{
+    border-radius: 20px;
+}
+
+.btn{
+    border-radius: 15px;
+}

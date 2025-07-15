@@ -1,0 +1,15 @@
+.panel-body{
+    background-color: #BF9B77;
+    color: #372D22;
+    border-radius: 15px;
+}
+
+.panel-default{
+    border-radius: 15px;
+}
+
+.btn{
+    border-radius: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+}

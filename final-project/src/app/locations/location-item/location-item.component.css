@@ -1,5 +1,5 @@
 .locationHeader {
-   background-color: azure;
+   background-color: #ffefe0;
    border: solid thin black;
    border-radius: 10px;
    padding: 0.4rem;
@@ -11,4 +11,10 @@ padding: 5px;
 margin-top: .25rem;
 margin-left: 1rem;
 font-size: 1.5rem;
+}
+
+.list-group-item{
+   background-color: #ffd6ae;
+   color: #372D22;
+   border-radius: 15px;
 }

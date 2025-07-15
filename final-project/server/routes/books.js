@@ -20,32 +20,59 @@ router.get('/', (req, res, next) => {
         });
     });
 
-router.post('/', (req, res, next) => {
-    const maxBookId = sequenceGenerator.nextId("books");
+router.post('/', async (req, res, next) => {
+    console.log('[DEBUG-POST] --- Starting new book POST request ---');
+    console.log('[DEBUG-POST] Received body:', req.body);
 
-    const book = new Book({
-        id: maxBookId,
-        name: req.body.name,
-        description: req.body.description,
-        url: req.body.url,
-        release: req.body.release,
-        children: req.body.children
-    });
-
-    book.save()
-        .then(createdBook => {
-            res.status(201).json({
-                message: 'Book added successfully',
-                book: createdBook
-            });
-        })
-        .catch(error => {
-            res.status(500).json({
-                message: 'An error occurred',
-                error: error
-            });
+    let maxBookId;
+    try{
+        maxBookId = await sequenceGenerator.nextId("books");
+        console.log('[DEBUG-POST] Generated maxBookId:'. maxBookId);
+        if (maxBookId === undefined || maxBookId === null){
+            throw new Error('sequenceGenerator.nextId returned undefined or null');
+        }
+    } catch (sequenceError) {
+        console.error('[DEBUG-POST] ERROR: sequenceGenerator failed!', sequenceError);
+        return res.status(500).json({
+            message: 'Failed to generate book ID.',
+            error: sequenceError.message || sequenceError
         });
+    }
+    
+    let book;
+    try {
+        book = new Book({
+            id: maxBookId,
+            name: req.body.name,
+            description: req.body.description,
+            url: req.body.url,
+            release: req.body.release,
+            children: req.body.children
+        });
+    console.log('[DEBUG-POST] Book instance created with ID:', book.id, 'Full object:', book);
+
+    const createdBook = await book.save();
+    console.log('[DEBUG-POST] Book saved successfully:', createdBook);
+    res.status(201).json({
+        message: 'Book added successfully',
+        book: createdBook
     });
+    } catch (error) {
+        console.error('[DEBUG-POST] ERROR saving book (Mongoose catch):', error);
+
+        let errorMessage = 'An error occurred while saving the book to the database.';
+        if (error.name === 'ValidationError') {
+            errorMessage = 'Validation failed:' + error.message;
+        } else if (error.code === 11000) {
+            errorMessage = 'Duplicate entry for book ID or unique field.';
+        }
+
+        res.status(500).json({
+            message: errorMessage,
+            error: error.message
+        });
+    }
+});
 
 router.put('/:id', (req, res, next) => {
     Book.findOne({ id: req.params.id })

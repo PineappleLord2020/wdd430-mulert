@@ -1,3 +1,14 @@
 input.ng-invalid {
   border: 1px solid red;
 }
+
+.btn{
+ margin-left: 5px;
+ margin-right: 5px;
+ border-radius: 15px;
+}
+
+.panel{
+  background-color: #372D22bf;
+  border-radius: 15px;
+}

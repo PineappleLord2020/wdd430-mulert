@@ -20,32 +20,53 @@ router.get('/', (req, res, next) => {
         });
     });
 
-router.post('/', (req, res, next) => {
-    const maxAuthorId = sequenceGenerator.nextId("Authors");
+router.post('/', async (req, res, next) => {
+    console.log('[DEBUG-AUTHORS-POST] --- Starting new author POST request ---');
+    console.log('[DEBUG-AUTHORS-POST] Received body:', req.body);
 
-    const author = new Author({
-        id: maxAuthorId,
-        name: req.body.name,
-        email: req.body.email,
-        age: req.body.age,
-        imageUrl: req.body.imageUrl,
-        group: req.body.group
-    });
-
-    author.save()
-        .then(createdAuthor => {
-            res.status(201).json({
-                message: 'Author added successfully',
-                document: createdAuthor
-            });
-        })
-        .catch(error => {
-            res.status(500).json({
-                message: 'An error occurred',
-                error: error
-            });
+    let maxAuthorId;
+    try{
+        maxAuthorId = await sequenceGenerator.nextId("authors");
+        if (maxAuthorId === undefined || maxAuthorId === null) {
+            throw new Error('sequenceGenerator.nextId returned undefined or null for authors. ');  
+        }
+    } catch (sequenceError) {
+        console.error('[DEBUG-AUTHORS-POST] ERROR: sequenceGenerator for authors failed!', sequenceError);
+        return res.status(500).json({
+            message: 'Failed to generate author ID.',
+            error: sequenceError.message || sequenceError
         });
-    });
+    }
+
+    let author;
+    try{
+        author = new Author({
+            id: maxAuthorId,
+            name: req.body.name,
+            email: req.body.email,
+            age: req.body.age,
+            imageUrl: req.body.imageUrl,
+            group: req.body.group
+        });
+        console.log('[DEBUG-AUTHORS-POST] Author instance created with ID:', author.id, 'Full object:', author);
+
+        const createdAuthor = await author.save();
+        console.log('[DEBUG-AUTHORS-POST] Author saved successfully:', createdAuthor);
+        return res.status(201).json({
+            message: 'Author added successfully',
+            document: createdAuthor
+        });
+    } catch (error) {
+        console.error('DEBUG-AUTHORS-POST] ERROR saving author (Mongoose catch):', error);
+
+        let errorMessage = 'AN error occurred while saving the author to the database.';
+        if (error.name === 'Validation Error') {
+            errorMessage = 'Validation failed: ' + error.message;
+        } else if (error.code === 11000) {
+            errorMessage = 'Duplicate entry for author ID or unique field (e.g., email).';
+        }
+    }         
+});
 
 router.put('/:id', (req, res, next) => {
     Author.findOne({ id: req.params.id })

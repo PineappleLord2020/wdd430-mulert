@@ -7,3 +7,12 @@
   float: left;
   padding: .25rem
 }
+
+.list-group-item.active {
+  background-color: #E1B68C;
+  color: #372D22;
+}
+
+.list-group-item{
+  background-color: #ddd3c8;
+}
